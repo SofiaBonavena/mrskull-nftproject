@@ -1,4 +1,5 @@
 const factoryAddress = process.env.REACT_APP_FACTORY_ADDRESS;
+
 const factoryAbi = [
   { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
   {

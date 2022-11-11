@@ -14,6 +14,7 @@ const Mint = () => {
   const web3 = new Web3(provider);
 
   const [userBalance, setUserBalance] = useState(0);
+  const [tokenPrice, setTokenPrice] = useState(0);
 
   useEffect(() => {
     if (address) {
@@ -26,6 +27,23 @@ const Mint = () => {
       setUserBalance(0);
     }
   }, [web3.utils, balance, address]);
+
+  useEffect(() => {
+    const getPrice = async () => {
+      const myContract = new web3.eth.Contract(factoryAbi, factoryAddress);
+      const price = await myContract.methods
+        .monsterPrice()
+        .call()
+        .catch(function (error) {
+          return false;
+        });
+
+      const valueEth = web3.utils.fromWei(`${price}`, 'ether');
+
+      setTokenPrice(valueEth);
+    };
+    getPrice();
+  });
 
   const handleMint = async () => {
     console.log('MINT!');
@@ -52,6 +70,8 @@ const Mint = () => {
         .catch(function (error) {
           return false;
         });
+
+      setTokenPrice(price);
 
       console.log('Sale Started', saleStarted);
       console.log('Sale Started', publicSaleStarted);
@@ -93,6 +113,7 @@ const Mint = () => {
   return (
     <div className='wallet-client'>
       <p>Balance {userBalance} eth</p>
+      <p>Price {tokenPrice} eth</p>
       <button disabled={!address ? true : false} onClick={handleMint}>
         Mint
       </button>
