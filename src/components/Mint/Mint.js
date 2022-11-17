@@ -15,6 +15,7 @@ const Mint = () => {
 
   const [userBalance, setUserBalance] = useState(0);
   const [tokenPrice, setTokenPrice] = useState(0);
+  const [mintStatus, setMintStatus] = useState(`Waiting`);
 
   useEffect(() => {
     if (address) {
@@ -38,7 +39,7 @@ const Mint = () => {
           return false;
         });
 
-      const valueEth = web3.utils.fromWei(`${price}`, 'ether');
+      const valueEth = web3.utils.fromWei(`${price || 0}`, 'ether');
 
       setTokenPrice(valueEth);
     };
@@ -93,31 +94,41 @@ const Mint = () => {
         .mint(mintParams.proof, mintParams.leaf, parseInt(mintParams.count))
         .send({ from: address, value: total })
         .once('transactionHash', function (hash) {
-          // setUserConfirmation(`success`);
-          // setHash(hash);
+          setMintStatus(`userConfirmed`);
           console.log('Transaction Hash', hash);
         })
         .once('receipt', function (receipt) {
-          // setBlChainConfirmation(`success`);
-          // setTimeout(() => {
-          //   setSuccess(true);
-          // }, 1000);
+          setMintStatus(`blockchainConfirmed`);
           console.log('Transaction Confirmed', receipt);
         })
         .on('error', function (error, receipt) {
-          // handleError(error);
           console.log('Error', error);
+          setMintStatus(`error`);
         });
     } catch (error) {}
   };
   return (
-    <div className='wallet-client'>
-      <p>Balance {userBalance} eth</p>
-      <p>Price {tokenPrice} eth</p>
-      <button disabled={!address ? true : false} onClick={handleMint}>
-        Mint
-      </button>
-    </div>
+    <>
+      {address && (
+        <div className='wallet-client'>
+          <p>Balance {userBalance} eth</p>
+          <p>Price {tokenPrice} eth</p>
+          <button disabled={!address ? true : false} onClick={handleMint}>
+            Mint
+          </button>
+          <p>
+            {mintStatus === `userConfirmed` && `User confirmed`}
+            {mintStatus === `blockchainConfirmed` && `Blockchain Confirmed`}
+            {mintStatus === `error` && `Error`}
+          </p>
+        </div>
+      )}
+      {!address && (
+        <div className='wallet-client'>
+          <p>CONNECT WALLET</p>
+        </div>
+      )}
+    </>
   );
 };
 
