@@ -9,7 +9,7 @@ const Footer = () => {
     <div className='footer_container'>
         <div class="content has-text-centered">
           <p>
-            <img src={Image} width={200} />
+            <img src={Image} alt="logo" width={200} />
             <p className='footer_text'>A collection of 1000 NFT's <br/> ©Sofia Bonavena</p>
           </p>
         </div>

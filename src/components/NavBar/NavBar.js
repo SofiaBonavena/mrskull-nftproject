@@ -28,7 +28,7 @@ const NavBar = () => {
             <span aria-hidden="true"></span>
           </a>
           <a className="navbar-item" href="/">
-            <img src={Image} width={150} height={40}/>
+            <img src={Image} alt="logo" width={150} height={40}/>
           </a>
         </div>
         <div

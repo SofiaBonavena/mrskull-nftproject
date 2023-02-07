@@ -8,8 +8,6 @@ import {
   useBalance,
 } from "../../contexts/OnboardContext";
 import { factoryAddress, factoryAbi } from "../../services/onboard/contract";
-import WalletClient from "../WalletClient/WalletClient";
-
 const Mint = () => {
   const address = useAddress();
   const balance = useBalance();
